@@ -1,0 +1,7 @@
+"$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
+
+[[mgr.prepend_keymap]]
+on = "Y"
+for = "macos"
+run = "plugin copy-files-to-clipboard"
+desc = "Copy selected files to macOS clipboard"

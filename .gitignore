@@ -1,0 +1,36 @@
+.DS_Store
+
+# Secrets and local-only overrides
+.env
+.env.*
+*.local
+*.local.*
+**/secrets/**
+**/*token*
+**/*secret*
+**/*credential*
+**/*auth*
+
+# Shell history/state
+.zsh_history
+.bash_history
+.python_history
+.psql_history
+.lesshst
+.viminfo
+.zcompdump*
+.zsh_sessions/
+
+# Dependencies and generated/vendor files
+node_modules/
+**/node_modules/
+.config/tmux/.tmux/plugins/
+.config/karabiner/automatic_backups/
+.config/configstore/
+.config/raycast/
+.config/sanity/config.json
+
+# App-generated backups/logs
+*.bak
+*.backup
+*.log
