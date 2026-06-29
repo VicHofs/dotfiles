@@ -3,6 +3,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
+DOTFILES_OSI_ONLY=0
 OS="$(uname -s)"
 
 log() {
@@ -15,6 +16,59 @@ has() {
 
 warn() {
   printf 'WARN: %s\n' "$1" >&2
+}
+
+usage() {
+  cat <<'EOF'
+Usage: setup.sh [--osi]
+
+Options:
+  --osi  Skip packages that are not distributed under OSI-approved licenses.
+EOF
+}
+
+parse_args() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --osi)
+        DOTFILES_OSI_ONLY=1
+        ;;
+      -h|--help)
+        usage
+        exit 0
+        ;;
+      *)
+        usage >&2
+        exit 2
+        ;;
+    esac
+    shift
+  done
+}
+
+is_non_osi_package() {
+  # Proprietary apps and Google SDK terms are not OSI-approved licenses.
+  case "$1" in
+    android-platform-tools|obsidian|raycast|shortcat)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+filter_osi_packages() {
+  local package
+
+  for package in "$@"; do
+    if is_non_osi_package "$package"; then
+      printf 'Skipping non-OSI package: %s\n' "$package" >&2
+      continue
+    fi
+
+    printf '%s\n' "$package"
+  done
 }
 
 can_sudo() {
@@ -168,23 +222,31 @@ install_powerlevel10k() {
 }
 
 install_brew_packages() {
+  local casks formulae package
+
   log "Updating Homebrew"
   brew analytics off >/dev/null 2>&1 || true
   brew update
 
   log "Adding Homebrew taps"
   brew tap homebrew/cask-fonts || true
+  brew tap thezoraiz/ascii-image-converter || true
   brew tap joshmedeski/sesh || true
   brew tap nikitabobko/tap || true
+  brew tap anomalyco/tap || true
+  brew tap theboredteam/boring-notch || true
+  brew tap stonerl/thaw || true
 
-  local formulae=(
-    ascii-image-converter
+  formulae=(
+    thezoraiz/ascii-image-converter/ascii-image-converter
     android-platform-tools
     bat
     bun
+    chafa
     coreutils
     eza
     fd
+    ffmpeg
     fzf
     git
     gum
@@ -194,34 +256,58 @@ install_brew_packages() {
     neovim
     nvm
     openssl@3
+    anomalyco/tap/opencode
     pngpaste
+    poppler
     python@3.12
+    resvg
     ripgrep
     rmpc
-    sesh
+    joshmedeski/sesh/sesh
+    sevenzip
     stow
     tmux
     tree
     tree-sitter
+    thaw
     yazi
     zoxide
     zsh-autosuggestions
     zsh-syntax-highlighting
   )
 
+  if [[ "$DOTFILES_OSI_ONLY" == 1 ]]; then
+    local osi_formulae=()
+    while IFS= read -r package; do
+      osi_formulae+=("$package")
+    done < <(filter_osi_packages "${formulae[@]}")
+    formulae=("${osi_formulae[@]}")
+  fi
+
   install_brew_formulae "${formulae[@]}"
 
-  local casks=(
-    aerospace
+  casks=(
+    nikitabobko/tap/aerospace
+    theboredteam/boring-notch/boring-notch
     ghostty
     karabiner-elements
     raycast
+    shortcat
+    stats
     obsidian
     temurin@17
     font-fira-code-nerd-font
     font-hack-nerd-font
     font-meslo-lg-nerd-font
   )
+
+  if [[ "$DOTFILES_OSI_ONLY" == 1 ]]; then
+    local osi_casks=()
+    while IFS= read -r package; do
+      osi_casks+=("$package")
+    done < <(filter_osi_packages "${casks[@]}")
+    casks=("${osi_casks[@]}")
+  fi
 
   install_brew_casks "${casks[@]}"
 }
@@ -523,6 +609,7 @@ install_user_npm_tools() {
 
   npm config set prefix "$HOME/.local" >/dev/null 2>&1 || true
   export PATH="$HOME/.local/bin:$PATH"
+  npm_install_if_missing opencode opencode-ai
   npm_install_if_missing tree-sitter tree-sitter-cli
 }
 
@@ -698,6 +785,27 @@ bootstrap_repos() {
   fi
 }
 
+install_tmux_plugins() {
+  local install_script plugin_dir
+
+  if ! has tmux; then
+    warn "tmux is not installed; skipping tmux plugin install."
+    return
+  fi
+
+  plugin_dir="$HOME/.config/tmux/.tmux/plugins"
+  install_script="$plugin_dir/tpm/bin/install_plugins"
+
+  if [[ ! -x "$install_script" ]]; then
+    warn "TPM installer is not available; skipping tmux plugin install."
+    return
+  fi
+
+  log "Installing tmux plugins"
+  tmux start-server \; set-environment -g TMUX_PLUGIN_MANAGER_PATH "$plugin_dir" || warn "Could not configure TPM plugin path"
+  TMUX_PLUGIN_MANAGER_PATH="$plugin_dir" "$install_script" || warn "Could not install tmux plugins"
+}
+
 ensure_private_files() {
   log "Ensuring private local files exist"
   mkdir -p "$HOME/.config/secrets"
@@ -741,6 +849,8 @@ stow_dotfiles() {
 }
 
 main() {
+  parse_args "$@"
+
   install_platform_packages
   install_oh_my_zsh
   install_powerlevel10k
@@ -748,6 +858,7 @@ main() {
   bootstrap_repos
   check_dotfiles_updates
   stow_dotfiles
+  install_tmux_plugins
 
   log "Setup complete"
 }
