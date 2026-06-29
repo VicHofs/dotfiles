@@ -1,65 +1,52 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        event = { "BufReadPre", "BufNewFile" },
+        branch = "main",
+        lazy = false,
         build = ":TSUpdate",
         config = function()
-            -- import nvim-treesitter plugin
             local treesitter = require("nvim-treesitter")
 
-            -- configure treesitter
-            treesitter.setup({ -- enable syntax highlighting
-                highlight = {
-                    enable = true,
-                    additional_vim_regex_highlighting = false,
-                },
-                -- enable indentation
-                indent = { enable = true },
+            local parsers = {
+                "json",
+                "javascript",
+                "typescript",
+                "tsx",
+                "go",
+                "yaml",
+                "html",
+                "css",
+                "python",
+                "http",
+                "prisma",
+                "markdown",
+                "markdown_inline",
+                "svelte",
+                "graphql",
+                "bash",
+                "lua",
+                "vim",
+                "dockerfile",
+                "gitignore",
+                "query",
+                "vimdoc",
+                "c",
+                "java",
+                "rust",
+                "ron",
+            }
 
-                -- ensure these languages parsers are installed
-                ensure_installed = {
-                    "json",
-                    "javascript",
-                    "typescript",
-                    "tsx",
-                    "go",
-                    "yaml",
-                    "html",
-                    "css",
-                    "python",
-                    "http",
-                    "prisma",
-                    "markdown",
-                    "markdown_inline",
-                    "svelte",
-                    "graphql",
-                    "bash",
-                    "lua",
-                    "vim",
-                    "dockerfile",
-                    "gitignore",
-                    "query",
-                    "vimdoc",
-                    "c",
-                    "java",
-                    "rust",
-                    "ron",
-                },
-                incremental_selection = {
-                    enable = true,
-                    keymaps = {
-                        init_selection = "<C-space>",
-                        node_incremental = "<C-space>",
-                        -- scope_incremental = false,
-                        node_decremental = "<C-backspace>",
-                    },
-                },
+            treesitter.setup({
+                install_dir = vim.fn.stdpath("data") .. "/site",
             })
-            -- force start treesitter for all filetypes
-            vim.api.nvim_create_autocmd('FileType', {
-                pattern = '*',
+
+            treesitter.install(parsers)
+
+            vim.api.nvim_create_autocmd("FileType", {
                 callback = function()
-                    pcall(vim.treesitter.start)
+                    if pcall(vim.treesitter.start) and type(treesitter.indentexpr) == "function" then
+                        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    end
                 end,
             })
         end,

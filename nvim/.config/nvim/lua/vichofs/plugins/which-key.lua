@@ -18,6 +18,7 @@ return {
 			spec = {
 				{ "<leader>p", group = "Picker" },
 				{ "<leader>g", group = "Git" },
+				{ "<leader>i", group = "i18n" },
 				{ "<leader>9", group = "99" },
 				{ "<leader>s", group = "Split/Search/Substitute" },
 				{ "<leader>t", group = "Tabs/Toggle" },
