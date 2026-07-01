@@ -23,7 +23,8 @@ usage() {
 Usage: setup.sh [--osi]
 
 Options:
-  --osi  Skip packages that are not distributed under OSI-approved licenses.
+  --osi      Skip packages that are not distributed under OSI-approved licenses.
+  --no-sudo  Do not try to use sudo; install only user-local tools where possible.
 EOF
 }
 
@@ -32,6 +33,9 @@ parse_args() {
     case "$1" in
       --osi)
         DOTFILES_OSI_ONLY=1
+        ;;
+      --no-sudo)
+        DOTFILES_NO_SUDO=1
         ;;
       -h|--help)
         usage
