@@ -8,7 +8,7 @@ font-family = "Fira Code"
 font-family = "MesloLGS NF"
 font-family = "Hack Nerd Font Mono"
 font-size = 16
-font-feature = -liga,-calt,-dlig
+font-feature = +liga,+calt,-dlig
 cursor-style = block
 cursor-style-blink = false
 cursor-color = cell-foreground
@@ -29,7 +29,7 @@ auto-update = check
 auto-update-channel = stable
 
 # extras
-shell-integration-features = no-cursor
+shell-integration-features = ssh-env,ssh-terminfo,no-cursor
 copy-on-select = clipboard
 # cmd or alt c copy (not vim yank)
 
