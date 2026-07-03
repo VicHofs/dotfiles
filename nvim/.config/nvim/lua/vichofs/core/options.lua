@@ -10,19 +10,19 @@ vim.opt.nu = true
 vim.opt.relativenumber = true
 
 -- indentation
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.wrap = false
 
--- Always hard wrap at 80 characters in every file
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+-- Hard wrap prose at 80 characters while typing.
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "gitcommit", "markdown", "text" },
     callback = function()
         vim.opt_local.textwidth = 80
-        vim.opt_local.formatoptions:append("t") -- wrap text
-        vim.opt_local.smartindent = false
+        vim.opt_local.formatoptions:append("t")
     end,
 })
 

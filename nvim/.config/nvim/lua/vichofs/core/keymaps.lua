@@ -38,13 +38,7 @@ vim.keymap.set("v", "<leader>d", [["_d]])
 -- ctrl c as escape cuz Im lazy to reach up to the esc key
 vim.keymap.set("i", "<C-c>", "<Esc>")
 vim.keymap.set("n", "<C-c>", ":nohl<CR>", { desc = "Clear search hl", silent = true })
-vim.keymap.set("n", "<leader>f", function()
-    local ft = vim.bo.filetype
-    if ft == "c" or ft == "cpp" or ft == "objc" or ft == "objcpp" then
-        require("lint").try_lint("cpplint")
-        return
-    end
-
+vim.keymap.set({ "n", "v" }, "<leader>f", function()
     local ok, conform = pcall(require, "conform")
     if ok then
         conform.format({
@@ -56,7 +50,7 @@ vim.keymap.set("n", "<leader>f", function()
     end
 
     vim.lsp.buf.format()
-end, { desc = "Format file or lint C/C++ with cpplint" })
+end, { desc = "Format file or range" })
 
 -- Unmaps Q in normal mode
 vim.keymap.set("n", "Q", "<nop>")

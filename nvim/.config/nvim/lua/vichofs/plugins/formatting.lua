@@ -82,12 +82,5 @@ return {
 			prepend_args = { "-i", "4" },
 		}
 
-		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
-			conform.format({
-				lsp_fallback = true,
-				async = false,
-				timeout_ms = 1000,
-			})
-		end, { desc = "Format whole file or range (in visual mode) with" })
 	end,
 }
