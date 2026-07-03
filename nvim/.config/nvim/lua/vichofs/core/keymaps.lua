@@ -33,7 +33,7 @@ vim.keymap.set("v", "p", '"_dp', opts)
 vim.keymap.set("n", "<leader>Y", [["+Y]], opts)
 
 -- leader d delete wont remember as yanked/clipboard when delete pasting
-vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+vim.keymap.set("v", "<leader>d", [["_d]])
 
 -- ctrl c as escape cuz Im lazy to reach up to the esc key
 vim.keymap.set("i", "<C-c>", "<Esc>")
