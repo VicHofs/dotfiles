@@ -52,7 +52,7 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 -- misc
-vim.opt.guicursor = ""
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 vim.opt.colorcolumn = ""
