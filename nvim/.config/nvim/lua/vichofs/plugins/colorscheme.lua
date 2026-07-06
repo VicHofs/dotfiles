@@ -326,7 +326,7 @@ return {
                     telescope = true,
                     which_key = true,
                     gitsigns = true,
-                    markdown = true,
+                    render_markdown = true,
                     mini = true,
                     dap = true,
                     dap_ui = true,

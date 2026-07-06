@@ -13,9 +13,6 @@ return {
 		local actions = require("telescope.actions")
 		local builtin = require("telescope.builtin")
 
-		telescope.load_extension("fzf")
-		telescope.load_extension("themes")
-
 		telescope.setup({
 			defaults = {
 				path_display = { "smart" },
@@ -37,6 +34,9 @@ return {
 				},
 			},
 		})
+
+		telescope.load_extension("fzf")
+		telescope.load_extension("themes")
 
 		-- Keymaps
 		vim.keymap.set("n", "<leader>pr", "<cmd>Telescope oldfiles<CR>", { desc = "Fuzzy find recent files" })
