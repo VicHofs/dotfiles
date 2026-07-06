@@ -29,6 +29,40 @@ return {
             return vim.api.nvim_replace_termcodes(keys, true, true, true)
         end
 
+        local feedkeys = function(keys)
+            vim.fn.feedkeys(rhs(keys), "")
+        end
+
+        local tabout_targets = {
+            ["'"] = true,
+            ['"'] = true,
+            ["`"] = true,
+            [")"] = true,
+            ["]"] = true,
+            ["}"] = true,
+        }
+
+        local tabout_back_targets = {
+            ["'"] = true,
+            ['"'] = true,
+            ["`"] = true,
+            ["("] = true,
+            ["["] = true,
+            ["{"] = true,
+        }
+
+        local should_tabout = function()
+            local line = vim.api.nvim_get_current_line()
+            local col = vim.fn.col(".")
+            return tabout_targets[line:sub(col, col)] == true
+        end
+
+        local should_tabout_back = function()
+            local line = vim.api.nvim_get_current_line()
+            local col = vim.fn.col(".")
+            return tabout_back_targets[line:sub(col - 1, col - 1)] == true
+        end
+
         local lsp_kinds = {
             Class = ' ',
             Color = ' ',
@@ -314,6 +348,8 @@ return {
                         smart_bs(true) -- true means to dedent
                     elseif in_whitespace() then
                         smart_bs()
+                    elseif should_tabout_back() then
+                        feedkeys("<Plug>(TaboutBack)")
                     else
                         fallback()
                     end
@@ -332,6 +368,8 @@ return {
                         luasnip.expand_or_jump()
                     elseif in_whitespace() then
                         smart_tab()
+                    elseif should_tabout() then
+                        feedkeys("<Plug>(Tabout)")
                     else
                         cmp.complete()
                     end
