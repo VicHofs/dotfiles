@@ -39,6 +39,8 @@ alias nlof="fzf_listoldfiles.sh"
 alias fman="compgen -c | fzf | xargs man"
 alias nzo="zoxide_openfiles_nvim.sh"
 
+alias oc="opencode"
+
 # nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
