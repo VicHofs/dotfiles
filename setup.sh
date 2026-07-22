@@ -254,6 +254,7 @@ install_brew_packages() {
     fzf
     git
     gum
+    hunk
     imagemagick
     jq
     lazygit
