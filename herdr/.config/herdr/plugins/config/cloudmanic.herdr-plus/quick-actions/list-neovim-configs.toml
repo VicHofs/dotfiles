@@ -1,0 +1,3 @@
+name = "Edit Neovim Config"
+description = "Open the main Neovim config"
+command = "nvim ~/.config/nvim"

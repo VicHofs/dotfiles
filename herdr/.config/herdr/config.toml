@@ -1,0 +1,130 @@
+onboarding = false
+
+[theme]
+name = "tokyo-night"
+
+[terminal]
+new_cwd = "follow"
+
+[keys]
+prefix = "ctrl+b"
+settings = "prefix+;"
+reload_config = "prefix+r"
+goto = ["prefix+s", "prefix+g", "prefix+f"]
+new_workspace = "prefix+shift+w"
+rename_workspace = "prefix+$"
+rename_tab = "prefix+comma"
+copy_mode = "prefix+v"
+split_vertical = "prefix+|"
+split_horizontal = "prefix+minus"
+close_pane = "prefix+x"
+zoom = ["prefix+z", "prefix+m"]
+resize_mode = "prefix+shift+r"
+navigate_workspace_up = ["up", "ctrl+k"]
+navigate_workspace_down = ["down", "ctrl+j"]
+
+[ui]
+mouse_capture = true
+mouse_scroll_lines = 3
+prompt_new_tab_name = false
+show_agent_labels_on_pane_borders = true
+
+[session]
+resume_agents_on_restore = true
+
+[experimental]
+pane_history = false
+
+# Match tmux's prefix+h/j/k/l pane resizing. Herdr resize amounts are ratios,
+# so 0.05 is the closest equivalent to tmux's five-cell increment.
+[[keys.command]]
+key = "prefix+h"
+type = "shell"
+command = '"${HERDR_BIN_PATH:-herdr}" pane resize --direction left --amount 0.05 --pane "$HERDR_ACTIVE_PANE_ID"'
+description = "resize pane left"
+
+[[keys.command]]
+key = "prefix+j"
+type = "shell"
+command = '"${HERDR_BIN_PATH:-herdr}" pane resize --direction down --amount 0.05 --pane "$HERDR_ACTIVE_PANE_ID"'
+description = "resize pane down"
+
+[[keys.command]]
+key = "prefix+k"
+type = "shell"
+command = '"${HERDR_BIN_PATH:-herdr}" pane resize --direction up --amount 0.05 --pane "$HERDR_ACTIVE_PANE_ID"'
+description = "resize pane up"
+
+[[keys.command]]
+key = "prefix+l"
+type = "shell"
+command = '"${HERDR_BIN_PATH:-herdr}" pane resize --direction right --amount 0.05 --pane "$HERDR_ACTIVE_PANE_ID"'
+description = "resize pane right"
+
+[[keys.command]]
+key = "prefix+ctrl+y"
+type = "popup"
+command = "yazi"
+description = "open yazi"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+ctrl+t"
+type = "popup"
+command = 'exec "${SHELL:-zsh}"'
+description = "open scratch terminal"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+ctrl+g"
+type = "popup"
+command = "lazygit"
+description = "open lazygit"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+ctrl+m"
+type = "popup"
+command = "rmpc"
+description = "open music player"
+width = "95%"
+height = "95%"
+
+[[keys.command]]
+key = "prefix+y"
+type = "plugin_action"
+command = "cloudmanic.herdr-plus.quick-actions"
+description = "herdr-plus: quick actions"
+
+[[keys.command]]
+key = "prefix+shift+o"
+type = "plugin_action"
+command = "cloudmanic.herdr-plus.projects"
+description = "herdr-plus: projects"
+
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "vim-herdr-navigation.left"
+description = "navigate left (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "vim-herdr-navigation.down"
+description = "navigate down (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "vim-herdr-navigation.up"
+description = "navigate up (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "vim-herdr-navigation.right"
+description = "navigate right (vim/herdr)"

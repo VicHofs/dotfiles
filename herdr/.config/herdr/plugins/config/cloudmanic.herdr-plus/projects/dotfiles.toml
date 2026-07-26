@@ -1,0 +1,7 @@
+name = "Dotfiles"
+description = "Open the dotfiles repository"
+working_dir = "~/dotfiles"
+
+[[tabs]]
+name = "dots"
+command = "nvim ."

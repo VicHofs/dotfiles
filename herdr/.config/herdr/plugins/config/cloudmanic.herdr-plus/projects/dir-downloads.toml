@@ -1,0 +1,7 @@
+name = "Downloads"
+description = "Open the Downloads directory"
+working_dir = "~/Downloads"
+
+[[tabs]]
+name = "downloads"
+command = "yazi"

@@ -1,0 +1,7 @@
+name = "nvim conf"
+description = "Open the Neovim config"
+working_dir = "~/.config/nvim"
+
+[[tabs]]
+name = "nvim conf"
+command = "nvim ."

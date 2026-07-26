@@ -1,0 +1,11 @@
+name = "RC files"
+description = "Open shell configuration files"
+working_dir = "~"
+
+[[tabs]]
+name = ".zshrc"
+command = "nvim .zshrc"
+
+[[tabs]]
+name = ".zprofile"
+command = "nvim .zprofile"

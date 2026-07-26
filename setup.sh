@@ -759,13 +759,13 @@ check_dotfiles_updates() {
 stow_packages() {
   case "$OS" in
     Darwin)
-      printf '%s\n' aerospace ghostty hyper karabiner nvim scripts tmux yazi zsh
+      printf '%s\n' aerospace ghostty herdr hyper karabiner nvim scripts tmux yazi zsh
       ;;
     Linux)
-      printf '%s\n' ghostty hyper nvim scripts tmux yazi zsh
+      printf '%s\n' ghostty herdr hyper nvim scripts tmux yazi zsh
       ;;
     *)
-      printf '%s\n' nvim scripts tmux yazi zsh
+      printf '%s\n' herdr nvim scripts tmux yazi zsh
       ;;
   esac
 }

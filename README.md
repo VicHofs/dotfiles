@@ -38,13 +38,13 @@ External repos such as TPM and `fzf-git.sh` are cloned into local directories be
 From `~/dotfiles`:
 
 ```sh
-stow -R -t ~ aerospace ghostty hyper karabiner nvim scripts tmux yazi zsh
+stow -R -t ~ aerospace ghostty herdr hyper karabiner nvim scripts tmux yazi zsh
 ```
 
 On Linux, macOS-only packages such as `aerospace` and `karabiner` are skipped by `setup.sh`. Manual Linux Stow command:
 
 ```sh
-stow -R -t ~ ghostty hyper nvim scripts tmux yazi zsh
+stow -R -t ~ ghostty herdr hyper nvim scripts tmux yazi zsh
 ```
 
 ## Updates
@@ -61,13 +61,13 @@ To apply only symlink changes after pulling:
 
 ```sh
 cd ~/dotfiles
-stow -R -t "$HOME" aerospace ghostty hyper karabiner nvim scripts tmux yazi zsh
+stow -R -t "$HOME" aerospace ghostty herdr hyper karabiner nvim scripts tmux yazi zsh
 ```
 
 On Linux, use:
 
 ```sh
-stow -R -t "$HOME" ghostty hyper nvim scripts tmux yazi zsh
+stow -R -t "$HOME" ghostty herdr hyper nvim scripts tmux yazi zsh
 ```
 
 ## Secrets
