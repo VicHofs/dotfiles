@@ -1,10 +1,10 @@
 return {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     lazy = false,
     dependencies = {
-        "williamboman/mason-lspconfig.nvim",
+        "mason-org/mason-lspconfig.nvim",
         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        "hrsh7th/cmp-nvim-lsp",
+        "saghen/blink.cmp",
         "neovim/nvim-lspconfig",
         -- "saghen/blink.cmp",
     },
@@ -13,12 +13,6 @@ return {
         local mason = require("mason")
         local mason_lspconfig = require("mason-lspconfig")
         local mason_tool_installer = require("mason-tool-installer")
-
-        -- NOTE: Moved these local imports below back to lspconfig.lua due to mason depracated handlers
-
-        -- local lspconfig = require("lspconfig")
-        -- local cmp_nvim_lsp = require("cmp_nvim_lsp")             -- import cmp-nvim-lsp plugin
-        -- local capabilities = cmp_nvim_lsp.default_capabilities() -- used to enable autocompletion (assign to every lsp server config)
 
         -- enable mason and configure icons
         mason.setup({
@@ -51,6 +45,10 @@ return {
 
 		mason_tool_installer.setup({
 			ensure_installed = {
+				"biome",
+				"markdownlint-cli2",
+				"markdown-toc",
+				"mdformat",
 				"prettier", -- prettier formatter
 				"stylua",   -- lua formatter
 				"isort",    -- python formatter

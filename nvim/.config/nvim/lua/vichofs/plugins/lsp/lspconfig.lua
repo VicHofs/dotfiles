@@ -2,12 +2,12 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-        "hrsh7th/cmp-nvim-lsp", { "antosha417/nvim-lsp-file-operations", config = true },
+        "saghen/blink.cmp", { "antosha417/nvim-lsp-file-operations", config = true },
     },
     config = function()
         -- NOTE: LSP Keybinds
         vim.api.nvim_create_autocmd("LspAttach", {
-            group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+            group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
             callback = function(ev)
                 -- Buffer local mappings
                 local opts = { buffer = ev.buf, silent = true }
@@ -49,7 +49,7 @@ return {
                 vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
                 opts.desc = "Restart LSP"
-                vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
+                vim.keymap.set("n", "<leader>rs", "<cmd>lsp restart<cr>", opts)
 
                 vim.keymap.set("i", "<C-h>", function()
                     vim.lsp.buf.signature_help()
@@ -103,7 +103,7 @@ return {
                 signs = { text = signs },
                 virtual_text = virtual_text_enabled,
                 underline = true,  -- Always on
-                update_in_insert = true,
+                update_in_insert = false,
                 float = {
                     focusable = false,
                     style = "minimal",
@@ -148,8 +148,7 @@ return {
         end, { desc = "Toggle LSP diagnostics virtual text or precise hover" })
 
         -- NOTE: Setup servers
-        local cmp_nvim_lsp = require("cmp_nvim_lsp")
-        local capabilities = cmp_nvim_lsp.default_capabilities()
+        local capabilities = require("blink.cmp").get_lsp_capabilities()
 
         -- Global LSP settings (applied to all servers)
         vim.lsp.config('*', {
@@ -230,9 +229,20 @@ return {
                 },
             },
             settings = {
+              typescript = {
+                inlayHints = {
+                  includeInlayParameterNameHints = "all",
+                  includeInlayVariableTypeHints = true,
+                  includeInlayFunctionParameterTypeHints = true,
+                },
+              },
               javascript = {
                 validate = {
-                  enable = false,
+                  enable = true,
+                },
+                inlayHints = {
+                  includeInlayParameterNameHints = "all",
+                  includeInlayVariableTypeHints = true,
                 },
               },
             },
@@ -298,13 +308,25 @@ return {
             },
         })
 
-        vim.lsp.enable("lua_ls")
-        vim.lsp.enable("cssls")
-        vim.lsp.enable("emmet_language_server")
-        vim.lsp.enable("emmet_ls")
-        vim.lsp.enable("ts_ls")
-        vim.lsp.enable("gopls")
-        vim.lsp.enable("astro")
-        vim.lsp.enable("tailwindcss")
+        vim.lsp.config("astro", {
+            init_options = {
+                typescript = {
+                    tsdk = vim.fn.stdpath("data")
+                        .. "/mason/packages/typescript-language-server/node_modules/typescript/lib",
+                },
+            },
+        })
+
+        vim.lsp.enable({
+            "lua_ls",
+            "cssls",
+            "emmet_language_server",
+            "emmet_ls",
+            "ts_ls",
+            "gopls",
+            "astro",
+            "tailwindcss",
+            "marksman",
+        })
     end,
 }

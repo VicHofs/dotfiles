@@ -32,6 +32,7 @@ return {
 			objc = { "cpplint" },
 			objcpp = { "cpplint" },
 			python = { "pylint" },
+			markdown = { "markdownlint-cli2" },
 		}
 
 		eslint.args = {

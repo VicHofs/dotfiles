@@ -36,16 +36,20 @@ return {
                 "ron",
             }
 
-            treesitter.setup({
-                install_dir = vim.fn.stdpath("data") .. "/site",
-            })
-
             treesitter.install(parsers)
 
             vim.api.nvim_create_autocmd("FileType", {
-                callback = function()
-                    if pcall(vim.treesitter.start) and type(treesitter.indentexpr) == "function" then
-                        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                callback = function(args)
+                    local filetype = vim.bo[args.buf].filetype
+
+                    if pcall(vim.treesitter.start, args.buf)
+                        and type(treesitter.indentexpr) == "function"
+                        and filetype ~= "yaml"
+                        and filetype ~= "markdown"
+                    then
+                        vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                        vim.bo[args.buf].smartindent = false
+                        vim.bo[args.buf].cindent = false
                     end
                 end,
             })

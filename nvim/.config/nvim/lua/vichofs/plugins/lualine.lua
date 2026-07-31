@@ -42,9 +42,7 @@ return {
         local mode = {
             'mode',
             fmt = function(str)
-                -- return ' ' 
-                -- displays only the first character of the mode
-                return ' ' .. str
+                return str
             end,
         }
 

@@ -51,7 +51,7 @@ return {
                 liquid = { "prettier" },
                 lua = { "stylua" },
                 -- python = { "black" },
-                markdown = { "mdformat" , "markdown-toc" },
+                markdown = { "mdformat", "markdownlint-cli2", "markdown-toc" },
                 -- ["markdown.mdx"] = { "prettier", "markdownlint", "markdown-toc" },
             },
 			format_on_save = function(bufnr)

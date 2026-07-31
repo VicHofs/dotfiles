@@ -7,19 +7,13 @@ return {
         require("fff.download").download_or_build_binary()
     end,
     lazy = false,
-    opts = { -- (optional)
-        debug = {
-            enabled = true,     -- we expect your collaboration at least during the beta
-            show_scores = true, -- to help us optimize the scoring system, feel free to share your scores!
-        },
-    },
     config = function()
         require("fff").setup({
             install = {
                 timeout = 1200, -- 20 minutes - should be plenty
             },
             title = 'Find Files',  -- Window title
-            max_results = 60,     -- Maximum search results to display
+            max_results = 100,    -- Maximum search results to display
             max_threads = 4,      -- Maximum threads for fuzzy search
             lazy_sync = true,
             -- UI dimensions and appearance
@@ -104,6 +98,21 @@ return {
                 require("fff").find_files()
             end,
             desc = "Open file picker",
+        },
+        {
+            "<leader>ps",
+            function()
+                require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } })
+            end,
+            desc = "Live grep",
+        },
+        {
+            "<leader>pws",
+            function()
+                require("fff").live_grep_under_cursor()
+            end,
+            mode = { "n", "x" },
+            desc = "Grep selection or word",
         },
         {
             "<leader>pgf",

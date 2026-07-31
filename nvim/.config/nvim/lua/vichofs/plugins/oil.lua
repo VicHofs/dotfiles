@@ -15,7 +15,9 @@ return {
 			},
 			keymaps = {
 				["<C-h>"] = false,
+				["<C-l>"] = false,
                 ["<C-c>"] = false, -- prevent from closing Oil as <C-c> is esc key
+				["<C-r>"] = "actions.refresh",
 				["<M-h>"] = "actions.select_split",
                 ["q"] = "actions.close",
 			},

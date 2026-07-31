@@ -3,6 +3,7 @@ local set = vim.opt_local
 set.textwidth = 80   -- move text to new line at 80 characters
 set.spell = true     -- Enable spell checking
 set.linebreak = true
+set.smartindent = false
 
 -- Toggle Line Numbers (Visual Selection)
 function ToggleNumberVisualSelection()
@@ -456,4 +457,3 @@ vim.cmd(
 vim.cmd(
     string.format([[highlight @markup.heading.6.markdown cterm=bold gui=bold guifg=%s guibg=%s]], color_fg, color6_bg)
 )
-
