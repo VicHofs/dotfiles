@@ -3,6 +3,7 @@ onboarding = false
 [theme]
 name = "tokyo-night"
 
+auto_switch = false
 [terminal]
 new_cwd = "follow"
 
@@ -128,3 +129,6 @@ key = "ctrl+l"
 type = "plugin_action"
 command = "vim-herdr-navigation.right"
 description = "navigate right (vim/herdr)"
+
+[ui.toast]
+delivery = "herdr"

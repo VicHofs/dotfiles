@@ -254,6 +254,7 @@ install_brew_packages() {
     fzf
     git
     gum
+    herdr
     hunk
     imagemagick
     jq
@@ -429,6 +430,22 @@ install_linux_packages() {
   install_linux_optional_tools
 }
 
+install_herdr() {
+  if has herdr; then
+    return
+  fi
+
+  ensure_local_bin
+
+  if ! has curl; then
+    warn "curl is not available; skipping Herdr install."
+    return
+  fi
+
+  log "Installing Herdr"
+  curl -fsSL https://herdr.dev/install.sh | sh || warn "Could not install Herdr"
+}
+
 setup_environment_modules() {
   if [[ "$OS" != "Linux" ]]; then
     return
@@ -543,13 +560,17 @@ install_user_fzf() {
 }
 
 install_user_rustup() {
-  if has cargo || ! has curl; then
-    return
+  if ! has cargo; then
+    if ! has curl; then
+      return
+    fi
+
+    log "Installing Rust toolchain to ~/.cargo"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path || warn "Could not install rustup"
+    [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
   fi
 
-  log "Installing Rust toolchain to ~/.cargo"
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path || warn "Could not install rustup"
-  [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+  has rustup && rustup component add rust-analyzer || warn "Could not install rust-analyzer"
 }
 
 install_user_cargo_tools() {
@@ -811,6 +832,37 @@ install_tmux_plugins() {
   TMUX_PLUGIN_MANAGER_PATH="$plugin_dir" "$install_script" || warn "Could not install tmux plugins"
 }
 
+install_herdr_plugins() {
+  local entry plugin_id source
+  local plugins=(
+    "vim-herdr-navigation|paulbkim-dev/vim-herdr-navigation"
+    "cloudmanic.herdr-plus|cloudmanic/herdr-plus"
+  )
+
+  if ! has herdr; then
+    warn "Herdr is not installed; skipping Herdr plugin install."
+    return
+  fi
+
+  if ! has jq; then
+    warn "jq is not installed; skipping Herdr plugin install."
+    return
+  fi
+
+  log "Installing Herdr plugins"
+  for entry in "${plugins[@]}"; do
+    plugin_id="${entry%%|*}"
+    source="${entry#*|}"
+
+    if herdr plugin list --plugin "$plugin_id" --json 2>/dev/null \
+      | jq -e --arg plugin_id "$plugin_id" '.result.plugins[]? | select(.plugin_id == $plugin_id)' >/dev/null; then
+      continue
+    fi
+
+    herdr plugin install "$source" --yes || warn "Could not install Herdr plugin: $source"
+  done
+}
+
 ensure_private_files() {
   log "Ensuring private local files exist"
   mkdir -p "$HOME/.config/secrets"
@@ -847,6 +899,8 @@ stow_dotfiles() {
   cd "$DOTFILES_DIR"
 
   mkdir -p "$HOME/.config"
+  # Keep Herdr's downloaded plugins and runtime metadata outside this repo.
+  mkdir -p "$HOME/.config/herdr/plugins/config"
   packages="$(stow_packages)"
 
   # shellcheck disable=SC2086
@@ -857,12 +911,14 @@ main() {
   parse_args "$@"
 
   install_platform_packages
+  install_herdr
   install_oh_my_zsh
   install_powerlevel10k
   ensure_private_files
   bootstrap_repos
   check_dotfiles_updates
   stow_dotfiles
+  install_herdr_plugins
   install_tmux_plugins
 
   log "Setup complete"

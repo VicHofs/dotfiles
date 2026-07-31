@@ -31,7 +31,7 @@ module load nodejs
 module load go
 ```
 
-External repos such as TPM and `fzf-git.sh` are cloned into local directories before Stow runs so generated/vendor files stay out of the dotfiles repo.
+External repos such as TPM and `fzf-git.sh` are cloned into local directories before Stow runs so generated/vendor files stay out of the dotfiles repo. The setup script also installs Herdr and its `vim-herdr-navigation` and `herdr-plus` plugins when they are missing.
 
 ## Manual Stow
 
